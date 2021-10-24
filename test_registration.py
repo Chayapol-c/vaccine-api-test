@@ -98,6 +98,32 @@ class RegistrationTest(unittest.TestCase):
         fb = response.json()["feedback"]
         self.assertNotEqual(-1, fb.find("failed"))
 
+    def test_post_with_d_m_y_birth_date(self):
+        """Send the POST request with dd/mm/yyyy birth date format."""
+        birth_date = "1/10/2000"
+        endpoint = f"""{self.URL}/registration?citizen_id=5930485739485&name={self.name}&surname={self.surname}&birth_date={birth_date}&occupation={self.occupation}&address={self.address}""" 
+        response = requests.post(endpoint)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("application/json", response.headers['content-type'])
+
+    def test_post_with_y_m_d_birth_date(self):
+        """Send the POST request with mm/dd/yyyy birth date format."""
+        birth_date = "10/31/2000"
+        endpoint = f"""{self.URL}/registration?citizen_id=5930485939485&name={self.name}&surname={self.surname}&birth_date={birth_date}&occupation={self.occupation}&address={self.address}""" 
+        response = requests.post(endpoint)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("application/json", response.headers['content-type'])
+
+    def test_post_with_m_y_d_birth_date(self):
+        """Send the POST request with mm/yyyy/dd birth date."""
+        birth_date = "1/2000/1"
+        endpoint = f"""{self.URL}/registration?citizen_id=5930485939485&name={self.name}&surname={self.surname}&birth_date={birth_date}&occupation={self.occupation}&address={self.address}""" 
+        response = requests.post(endpoint)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("application/json", response.headers['content-type'])
+        fb = response.json()["feedback"]
+        self.assertNotEqual(-1, fb.find("failed"))
+
     def test_post_with_less_than_12_years_old(self):
         """Send the POST request with less than 12 years old data."""
         less_than_12_years_old_birth_date = "01-01-2020"
